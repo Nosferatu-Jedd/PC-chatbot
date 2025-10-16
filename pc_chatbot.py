@@ -1,16 +1,28 @@
 from gpt4all import GPT4All
+import os
 
 model = GPT4All(r"C:\Users\Jed\AppData\Local\nomic.ai\GPT4All\gpt4all-falcon-newbpe-q4_0.gguf")
 
-print("PC HELPER!")
+def find_file(filename, search_path=r"C:\\Users\Jed"):
+    for root, dirs, files in os.walk(search_path):
+        if filename.lower() in (f.lower() for f in files):
+            return os.path
+    return "file not found"
+
+print("Hello I'm your assisstant. How can i help?")
 print("type exit to quit")
 
 while True:
     user_input = input("You: ")
     if user_input.lower() == "exit":
         break
-    prompt = f"You are a professional PC technician. Help the user troubleshoot their problem in a simple and detailed way. Question: {user_input}"
+    if "find" in user_input.lower() or "where" in user_input.lower():
+        filename = user_input.replace("find", "").replace("where", "").replace("is", "").strip()
+        result = find_file(filename)
+        print ("Bot: ", result, "\n")
 
-    response = model.generate(prompt, max_tokens=120, temp=0.7)
+    prompt = f"You are a professional PC technician or Assistant. Help the user troubleshoot their problem and assist the user in finding files and other computer related tasks in a simple and detailed way. Question: {user_input}"
+
+    response = model.generate(prompt, max_tokens=150, temp=0.7)
     print("Bot: ", response.strip(), "\n")
     print()
